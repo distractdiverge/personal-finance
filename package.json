@@ -1,0 +1,23 @@
+{
+  "name": "personal-finance",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexlapinski/personal-finance.git"
+  },
+  "author": "Alex Lapinski <contact@alexlapinski.name>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexlapinski/personal-finance/issues"
+  },
+  "homepage": "https://github.com/alexlapinski/personal-finance#readme",
+  "dependencies": {
+    "electron": "^1.7.5"
+  }
+}
