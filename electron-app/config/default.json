@@ -1,0 +1,8 @@
+{
+  "plaid": {
+    "client_id": "59a23a084e95b83d70203d0c",
+    "secret": "a5a5f5d7057707e627933bcf0dad9e",
+    "public_key": "4b11b37992ae41564f98e316a522d8",
+    "plaid_env": "plaid.environments.development"
+  }
+}
