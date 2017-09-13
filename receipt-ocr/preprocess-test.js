@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const Promise = require('bluebird');
+const sharp = require('sharp');
 const preprocess = require('./preprocess');
 
 Promise.promisifyAll(fs);
@@ -19,8 +20,11 @@ function main() {
       input: path.join(inputDir, filename),
       output: path.join(outputDir, `formatted_${filename}`)
     }))
-    .map(paths => preprocess.resize(paths.input, paths.output))
+    .map(paths => preprocess.resize(paths.input)
+        .then(image => image.greyscale())
+        .then(image => image.toFile(paths.output))
+    )
     .then(() => {
-      console.log('Resize Complete');
+      console.log('Clean Complete');
     });
 }

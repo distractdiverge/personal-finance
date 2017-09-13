@@ -40,15 +40,14 @@ function clean(inputFile, outputFile, options = {}) {
 /**
  * Resizes an image by a given scale factor
  * @param inputFilepath - Absolute path to the input image
- * @param outputFilepath - Absolute path to the output image
  * @param upscaleFactor - A number to scale the image by
  * @param interpolator - The name of a 'sharp' interpolator {@link http://sharp.dimens.io/en/stable/api-resize/#resize}
  * @returns {Promise.<image: SharpImageObject>} {@link http://sharp.dimens.io/en/stable/api-constructor/#sharp}
  */
-function resize(inputFilepath, outputFilepath, upscaleFactor = 1.5, interpolator = 'bicubic') {
+function resize(inputFilepath, upscaleFactor = 1.5, interpolator = 'bicubic') {
   const image = sharp(inputFilepath);
   return image
     .metadata()
-    .then(filedata => image.resize(Math.ceil(filedata.width * upscaleFactor)))
-    .then(newImage => newImage.toFile(outputFilepath));
+    .then(filedata => Math.ceil(filedata.width * upscaleFactor))
+    .then(newWidth => image.resize(newWidth, null, interpolator));
 }
