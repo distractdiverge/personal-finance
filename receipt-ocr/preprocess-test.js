@@ -26,14 +26,15 @@ function main() {
       .then(image => applyOperation(image, i => i.normalise(), paths.output+'.step2.png'))
       .then(image => applyOperation(image, i => i.blur(1.5), paths.output+'.step3.png'))
       .then(image => applyOperation(image, i => i.threshold(155), paths.output+'.step4.png'))
-      .then(image => applyOperation(image, i => i.background(white).extend(50), paths.output+'.step5.png'))
+      /*.then(image => applyOperation(image, i => i.background(white).extend(50), paths.output+'.step5.png'))
       .then(image => applyOperation(image,
           i => i
             .metadata()
-            .then(data => i.extract(70, 70, data.width-70*2, data.height-70*2)),
+            //.then(data => i.extract({top:0, left:0, width:data.width, height:data.height})),
+            .then(data => i.resize(data.width-220, data.height-240).crop()),
             paths.output+'.step6.png'
           ))
-      .then(image => applyOperation(image, i => i.background(white).extend(50), paths.output+'.step7.png'))
+      .then(image => applyOperation(image, i => i.background(white).extend(50), paths.output+'.step7.png'))*/
       .then(image => applyOperation(image, i => i.sharpen(4), paths.output+'.step8.png'))
       .then(image => applyOperation(image, i => i, paths.output+'.final.png'))
       .then(image => {

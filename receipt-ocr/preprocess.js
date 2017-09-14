@@ -9,32 +9,25 @@ module.exports = {
 };
 
 /**
- * Execute the textcleaner ImageMagick script
+ * Execute a combination of scripts to clean the image
  *
  * @param {String} inputFile the path to the input image
  * @param {String} outputFile the path to the output image
- * @param {Object} options a collection of options (name:value) to pass (excluding '-' in the key)
- * @returns {Promise.<{image, filepath}>} A promise that returns the output image and filepath
  */
 function clean(inputFile, outputFile, options = {}) {
-  const _options = Object.assign({
-    binary: './textcleaner'
-  }, options);
-
-  return new Promise((resolve, reject) => {
-    const command = [_options.binary, inputFile, outputFile];
-
-    exec(command.join(' '), options, (err) => {
-      if (err) {
-        return reject(err);
-      }
-
-      fs.readFile(outputFile, (err, data) => err ? reject(err) : resolve({
-        image: data,
-        filepath: outputFile
-      }));
-    });
-  });
+  const defaultOptions = {
+    blur: 1.5,
+    threshold: 155,
+    sharpen: 4
+  };
+  const combinedOptions = Object.assign({}, defaultOptions, options);
+  return resize(inputFile)
+    .then(image => image.greyscale())
+    .then(image => image.normalise())
+    .then(image => image.blur(combinedOptions.blur))
+    .then(image => image.threshold(combinedOptions.threshold))
+    .then(image => image.sharpen(combinedOptions.sharpen))
+    .then(image => image.toFile(outputFile).then(() => image));
 }
 
 /**

@@ -6,44 +6,28 @@ const dateParser = require('./parsing/date');
 const fs = Promise.promisifyAll(require('fs'));
 const _ = require('lodash');
 const preprocess = require('./preprocess');
+const util = require('./util');
 
 
+const inputDir = path.join(__dirname, 'images', 'input');
 
-//
-process(path.join(__dirname, 'test', 'image4.png'))
-  .then(text => {
-    fs.writeFileSync(path.join(__dirname, 'out', 'image4.txt'), text);
-    return Promise.resolve();
-  });
+fs.readdirAsync(inputDir)
+  .map(filename => path.join(inputDir, filename))
+  .map(inputPath => parseText(inputPath));
 
-preprocess.clean(path.join(__dirname, 'test', 'image.png'), path.join(__dirname, 'test', 'formatted_image.png'))
-  .then(({filepath}) => process(filepath))
-  .then(text => {
-    const originalOutput = path.join(__dirname, 'out', 'original.txt');
-    fs.writeFileSync(originalOutput, text);
-    return Promise.resolve();
-  });
+function parseText(imagePath) {
+  const imagePathData = path.parse(imagePath);
+  const outputDir = path.join(__dirname, 'text');
+  const outputPath = path.join(outputDir, `${imagePathData.name}.txt`);
 
-/*
-process(filepath)
-  .then(text => {
-    const lines = S(text).lines();
-    console.log(`Number of lines in decoded image: ${lines.length}`);
+  const tempImageDir = path.join(__dirname, 'images', 'output');
+  const tempImagePath = path.join(tempImageDir, `${imagePathData.name}${imagePathData.ext}`);
 
-    const dates = lines
-      .filter(dateParser.containsDate)
-      .map(line => ({line, date:dateParser.parse(line)}));
-
-    dates.forEach(({line, date}) => {
-      console.log(`Found Date '${date}' in ${line}`);
-    });
-
-
-  })
-  .catch(err => {
-    console.log(err);
-  });
-*/
+  return Promise.join(util.ensureExists(outputDir), util.ensureExists(tempImageDir))
+    .then(() => preprocess.clean(imagePath, tempImagePath))
+    .then(() => process(tempImagePath))
+    .then(text => fs.writeFileAsync(outputPath, text));
+}
 
 
 /**
@@ -54,9 +38,7 @@ process(filepath)
 function process(filepath) {
   const options = {
     l: 'eng',
-   // psm: 4,
-    config: '.tesseractconfig',
-    binary: '/usr/local/bin/tesseract'
+    config: '.tesseractconfig'
   };
   return new Promise((resolve, reject) => {
     tesseract.process(filepath, options, (err, text) => {
