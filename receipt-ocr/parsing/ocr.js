@@ -1,5 +1,6 @@
-const tesseract = require('node-tesseract');
 const Promise = require('bluebird');
+const tesseract = require('node-tesseract');
+const processAsync = Promise.promisify(tesseract.process);
 
 module.exports = {
   extractText,
@@ -10,18 +11,15 @@ module.exports = {
  * @param {string} filepath
  * @returns {Promise.<text, error>} Resolves with text or rejects with an error.
  */
-function extractText(filepath) {
-  const options = {
+function extractText(filepath, options = {}) {
+  const defaultOptions = {
     l: 'eng',
+    psm: 4,
     config: '.tesseractconfig'
   };
-  return new Promise((resolve, reject) => {
-    tesseract.process(filepath, options, (err, text) => {
-      if(err) {
-        reject(err);
-      } else {
-        resolve(text);
-      }
-    });
-  });
+
+  return processAsync(
+    filepath,
+    Object.assign({}, defaultOptions, options)
+  );
 }
