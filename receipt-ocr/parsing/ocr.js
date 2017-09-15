@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const tesseract = require('node-tesseract');
 const processAsync = Promise.promisify(tesseract.process);
+const debug = require('debug')('ocr');
 
 module.exports = {
   extractText,
@@ -21,5 +22,9 @@ function extractText(filepath, options = {}) {
   return processAsync(
     filepath,
     Object.assign({}, defaultOptions, options)
-  );
+  ).catch(err => {
+    console.log('test');
+    debug(`An error occurred while processing ${filepath}: '${err}'`);
+    throw err;
+  });
 }

@@ -18,5 +18,8 @@
     "node-tesseract": "^0.2.7",
     "sharp": "^0.18.2",
     "string": "^3.3.3"
+  },
+  "devDependencies": {
+    "debug": "^3.0.1"
   }
 }

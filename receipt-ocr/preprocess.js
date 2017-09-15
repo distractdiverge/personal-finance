@@ -1,7 +1,5 @@
-const exec = require('child_process').exec;
-const fs = require('fs');
-const Promise = require('bluebird');
 const sharp = require('sharp');
+const debug = require('debug')('preprocess');
 
 module.exports = {
   clean,
@@ -27,7 +25,11 @@ function clean(inputFile, outputFile, options = {}) {
     .then(image => image.blur(combinedOptions.blur))
     .then(image => image.threshold(combinedOptions.threshold))
     .then(image => image.sharpen(combinedOptions.sharpen))
-    .then(image => image.toFile(outputFile).then(() => image));
+    .then(image => image.toFile(outputFile).then(() => image))
+    .catch(err => {
+      debug(`An error occurred while cleaning image '${inputFile}': '${err}'`);
+      throw err;
+    });
 }
 
 /**
@@ -42,5 +44,9 @@ function resize(inputFilepath, upscaleFactor = 1.5, interpolator = 'bicubic') {
   return image
     .metadata()
     .then(filedata => Math.ceil(filedata.width * upscaleFactor))
-    .then(newWidth => image.resize(newWidth, null, interpolator));
+    .then(newWidth => image.resize(newWidth, null, interpolator))
+    .catch(err => {
+      debug(`An error occurred while resizing image '${inputFilepath}': '${err}'`);
+      throw err;
+    });
 }
