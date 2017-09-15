@@ -5,6 +5,7 @@ const fs = Promise.promisifyAll(require('fs'));
 const preprocess = require('./preprocess');
 const ocr = require('./parsing/ocr');
 const io = require('./io');
+const debug = require('debug')('receipt-ocr');
 
 function main() {
   const inputDir = path.join(__dirname, 'images', 'input');
@@ -32,7 +33,11 @@ function parseText(imagePath) {
   return Promise.join(io.ensureExists(outputDir), io.ensureExists(tempImageDir))
     .then(() => preprocess.clean(imagePath, tempImagePath))
     .then(() => ocr.extractText(tempImagePath))
-    .then(text => fs.writeFileAsync(outputPath, text));
+    // TODO: Post-process the text to create CSV of items -> Price & Quantity
+    .then(text => {
+      debug(text);
+      return fs.writeFileAsync(outputPath, text);
+    });
 }
 
 
