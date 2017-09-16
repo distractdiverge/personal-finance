@@ -4,7 +4,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const preprocess = require('./preprocess');
 const ocr = require('./parsing/ocr');
-const text = require('./parsing/text');
+const ptext = require('./parsing/text');
 const io = require('./io');
 const debug = require('debug')('receipt-ocr');
 
@@ -20,19 +20,21 @@ function main() {
   fs.readdirAsync(inputDir)
     .filter(isValidFile)
     .map(filename => {
+      debug(`Preparing to parse ${filename}`);
       const imageName = path.parse(filename).name;
+      const imagePath = path.join(inputDir, filename);
       const writeRawText = _.partial(writeTextToFile, `${imageName}.txt`);
       const writeJsonText = _.partial(writeTextToFile, `${imageName}.txt`);
 
-      return path.join(inputDir, filename)
-        .then(parseImage)
+      return parseImage(imagePath)
         .tap(debug)
-        .tap(text => text.parse(text).then(writeJsonText))
+        .tap(text => ptext.parse(text).then(writeJsonText))
         .then(writeRawText);
     });
 }
 
 function parseImage(imagePath) {
+  debug(`Input ImagePath: ${imagePath}`);
   const imagePathData = path.parse(imagePath);
 
   const tempImageDir = path.join(__dirname, 'images', 'output');

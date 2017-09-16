@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
+const debug = require('debug')('io');
 
 module.exports = {
  ensureExists,
@@ -15,6 +16,9 @@ module.exports = {
  */
 function ensureExists(dirPath) {
   return fs.accessAsync(dirPath, fs.constants.W_OK)
-    .catch(err => fs.mkdirAsync(dirPath))
+    .catch(err => {
+      debug(err);
+      return fs.mkdirAsync(dirPath);
+    })
     .then(() => dirPath);
 }

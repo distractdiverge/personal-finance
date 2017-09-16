@@ -1,5 +1,7 @@
+const Promise = require('bluebird');
+
 module.exports = {
-  parts,
+  parse,
 };
 
 /***
@@ -14,7 +16,7 @@ module.exports = {
  *
  * @param text Raw Receipt Text parsed from OCR
  */
-function parts(text) {
+function parse(text) {
   // TODO: Extract parts of the given receipt text
-  return text;
+  return Promise.resolve(text);
 }
