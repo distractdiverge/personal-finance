@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/**/*.js",
     "start": "node index.js",
     "start:pp": "node preprocess-test.js"
   },
@@ -20,6 +20,8 @@
     "string": "^3.3.3"
   },
   "devDependencies": {
-    "debug": "^3.0.1"
+    "chai": "^4.1.2",
+    "debug": "^3.0.1",
+    "mocha": "^3.5.3"
   }
 }
