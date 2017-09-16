@@ -26,7 +26,7 @@ function parse(text) {
   let dateLines = [];
 
   // Iterate over each line
-  
+
 
   return Promise.resolve(text);
 }
