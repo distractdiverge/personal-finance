@@ -4,6 +4,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const preprocess = require('./preprocess');
 const ocr = require('./parsing/ocr');
+const text = require('./parsing/text');
 const io = require('./io');
 const debug = require('debug')('receipt-ocr');
 
@@ -18,28 +19,36 @@ function main() {
 
   fs.readdirAsync(inputDir)
     .filter(isValidFile)
-    .map(filename => path.join(inputDir, filename))
-    .map(inputPath => parseText(inputPath));
+    .map(filename => {
+      const imageName = path.parse(filename).name;
+      const writeRawText = _.partial(writeTextToFile, `${imageName}.txt`);
+      const writeJsonText = _.partial(writeTextToFile, `${imageName}.txt`);
+
+      return path.join(inputDir, filename)
+        .then(parseImage)
+        .tap(debug)
+        .tap(text => text.parse(text).then(writeJsonText))
+        .then(writeRawText);
+    });
 }
 
-function parseText(imagePath) {
+function parseImage(imagePath) {
   const imagePathData = path.parse(imagePath);
-  const outputDir = path.join(__dirname, 'text');
-  const outputPath = path.join(outputDir, `${imagePathData.name}.txt`);
 
   const tempImageDir = path.join(__dirname, 'images', 'output');
   const tempImagePath = path.join(tempImageDir, `${imagePathData.name}${imagePathData.ext}`);
 
-  return Promise.join(io.ensureExists(outputDir), io.ensureExists(tempImageDir))
+  return io.ensureExists(tempImageDir)
     .then(() => preprocess.clean(imagePath, tempImagePath))
-    .then(() => ocr.extractText(tempImagePath))
-    // TODO: Post-process the text to create CSV of items -> Price & Quantity
-    .then(text => {
-      debug(text);
-      return fs.writeFileAsync(outputPath, text);
-    });
+    .then(() => ocr.extractText(tempImagePath));
 }
 
+function writeTextToFile(filename, text) {
+  const outputDir = path.join(__dirname, 'text');
+  const outputPath = path.join(outputDir, filename);
+  return io.ensureExists(outputDir)
+    .then(() => fs.writeFileAsync(outputPath, text));
+}
 
 
 main();

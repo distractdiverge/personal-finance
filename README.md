@@ -18,15 +18,5 @@ application for most users.
 api that can take an image of a receipt (already cropped and rotated) 
 and then return a structured object containing the text and information
 from the image.
-
-## Supplemental Components
-These components represent an optional set, which are not required to
-run any of the core components. They can however be used to supplement
-features from the core components.
-
-* **[Infrastructure](./infrastructure/README.md)** - A set of 
-  terraform scripts to setup the required infrastructure (e.g. S3).
-  * *S3* - The S3 bucket is used to store input images for the 
-  Receipt OCR tool.
  
 
