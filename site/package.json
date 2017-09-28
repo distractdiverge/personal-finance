@@ -4,8 +4,22 @@
   "description": "A site for managing personal finances.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently -n \"server,web\" -c \"green,yellow\" \"npm run server\" \"npm run web\"",
+    "start:watch": "concurrently -n \"server,web\" -c \"blue,red\" \"npm run server:watch\" \"npm run web:watch\"",
+    "server": "node server",
+    "server:watch": "nodemon server",
+    "web": "echo \"TODO\"",
+    "web:watch": "echo \"TODO\""
   },
   "author": "Alex Lapinski <contact@alexlapinski.name>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.12.1",
+    "webpack": "^3.6.0"
+  },
+  "dependencies": {
+    "express": "^4.15.5"
+  }
 }
