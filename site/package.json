@@ -1,0 +1,11 @@
+{
+  "name": "personal-finance-site",
+  "version": "0.1.0",
+  "description": "A site for managing personal finances.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Lapinski <contact@alexlapinski.name>",
+  "license": "MIT"
+}
