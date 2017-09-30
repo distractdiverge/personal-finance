@@ -5,25 +5,31 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently -n \"server,web\" -c \"green,yellow\" \"npm run server\" \"npm run web\"",
-    "start:watch": "concurrently -n \"server,web\" -c \"blue,red\" \"npm run server:watch\" \"npm run web:watch\"",
-    "server": "node server",
-    "server:watch": "nodemon server",
-    "web": "webpack-dev-server",
-    "web:watch": "echo \"TODO\""
+    "start": "concurrently -n \"server,client\" -c \"green,yellow\" \"npm run server\" \"npm run client\"",
+    "server": "cross-env NODE_ENV=development nodemon server",
+    "client": "cross-env NODE_ENV=development webpack-dev-server --config webpack/dev.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack/prod.config.js"
   },
   "author": "Alex Lapinski <contact@alexlapinski.name>",
   "license": "MIT",
   "devDependencies": {
+    "autoprefixer": "^7.1.4",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.17",
     "concurrently": "^3.5.0",
+    "cross-env": "^5.0.5",
+    "eslint": "^4.8.0",
+    "extract-text-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^2.30.1",
     "nodemon": "^1.12.1",
+    "postcss-import": "^11.0.0",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1"
+    "webpack-dev-server": "^2.9.1",
+    "webpack-merge": "^4.1.0"
   },
   "dependencies": {
     "express": "^4.15.5",
