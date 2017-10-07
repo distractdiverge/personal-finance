@@ -1,10 +1,13 @@
 import React  from 'react';
 import { stitch } from 'keo';
+import NavBar from './NavBar';
+import Header from './Header';
 
 const render = ({props}) => {
   return (
-    <div style={{textAlign: 'center'}}>
-      <h1>Hello World</h1>
+    <div>
+      <NavBar title="Personal Finance" />
+      <Header text="Hello World!" />
     </div>
   );
 };
