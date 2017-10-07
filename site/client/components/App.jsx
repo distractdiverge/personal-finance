@@ -1,11 +1,12 @@
-import React from 'react';
+import React  from 'react';
+import { stitch } from 'keo';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <div style={{textAlign: 'center'}}>
-        <h1>Hello World</h1>
-      </div>
-    )
-  }
-}
+const render = ({props}) => {
+  return (
+    <div style={{textAlign: 'center'}}>
+      <h1>Hello World</h1>
+    </div>
+  );
+};
+
+export default stitch({render});
