@@ -1,0 +1,11 @@
+.cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 49%;
+  min-height: 200px;
+  margin: 0.5%;
+}
