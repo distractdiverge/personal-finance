@@ -16,7 +16,7 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "node-tesseract": "^0.2.7",
-    "sharp": "^0.18.2",
+    "sharp": "^0.30.5",
     "string": "^3.3.3"
   },
   "devDependencies": {
